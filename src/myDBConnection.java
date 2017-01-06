@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cooo;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -18,9 +18,9 @@ public class myDBConnection {
 	private Connection con;
 	
 	//replace USER and PWD with your login data (Matrikelnummer)
-    private String USER = "";
-    private String PWD = "";
-    private String URL = "";
+    private String USER = LoginData.login;
+    private String PWD = LoginData.pwd;//"1415946";
+    private String URL = LoginData.dbUrl;
     
     //5a)
     public myDBConnection() throws SQLException{
