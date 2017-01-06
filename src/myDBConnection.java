@@ -19,7 +19,7 @@ public class myDBConnection {
 	
 	//replace USER and PWD with your login data (Matrikelnummer)
     private String USER = LoginData.login;
-    private String PWD = LoginData.pwd;//"1415946";
+    private String PWD = LoginData.pwd;
     private String URL = LoginData.dbUrl;
     
     //5a)
