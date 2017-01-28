@@ -1,8 +1,10 @@
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import oracle.jdbc.driver.OracleDriver;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -15,64 +17,95 @@ import java.util.logging.Logger;
  * @author simon
  */
 public class Databased {
-    private String pwd = LoginData.pwd;
-    private String login = LoginData.login;
-    private String dbUrl = LoginData.dbUrl;
-    
-    private Statement stmt;
-    private Connection openConnection = null; 
-    
-    public static void main(String[] args) throws SQLException{
-        Databased base = new Databased();
-        String q = "Select * From Vorstellung";
-        for(String s : base.executeQuery(q))
-            System.out.println(s);
-        base.close();
-    }
-    
-    public Databased(){
-        try {
-            DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-            openConnection = DriverManager.getConnection(dbUrl, login, pwd);
-        } catch (SQLException ex) {
-            Logger.getLogger(Databased.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-    }
-    
-    public void execute(String s) throws SQLException{
-        stmt = openConnection.createStatement();
-        stmt.executeUpdate(s);
-    }
-    
-    public ArrayList<String> executeQuery(String q) throws SQLException{
-        ArrayList<String> s = new ArrayList<>();
-        
-        ResultSet rs;
-        stmt = openConnection.createStatement();
-        rs = stmt.executeQuery(q);
-        
-        ResultSetMetaData md = rs.getMetaData();
-        while (rs.next())
-        {   
-            String row ="";
-            for(int i = 1;i<=md.getColumnCount();i++){
-                 row += rs.getString(md.getColumnName(i))+" ";
-            }
-           s.add(row);
-        }
+     private static String dbUrl = LoginData.dbUrl;
+    private static String login = LoginData.login;
+    private static String pwd = LoginData.pwd;
 
-        return s;
+    private static Connection openConnection;
+
+    private static String path;
+
+    private static boolean establishConnection() {
+        // load driver
+        try {
+            DriverManager.registerDriver(new OracleDriver());
+            openConnection = DriverManager.getConnection(dbUrl, login, pwd);
+            return !openConnection.isClosed();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
-    
-    public void close(){
-        if (openConnection == null)
-            return;
+
+    private static boolean executeStatement(String statement) {
+        Statement stmt;
+        try {
+            stmt = openConnection.createStatement();
+            stmt.executeUpdate(statement);
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+           
+            return false;
+        }
+    }
+
+    private static boolean executeQuery(String query) {
+        Statement stmt;
+        try {
+            stmt = openConnection.createStatement();
+            ResultSet result = stmt.executeQuery(query);
+            displayResults(result);
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private static void displayResults(ResultSet result) {
+        try {
+            int cols = result.getMetaData().getColumnCount();
+            while (result.next()) {
+                String row = new String(" | ");
+                for (int i = 1; i <= cols; i++) {
+                    row = row.concat(result.getString(i) + " | ");
+                }
+                System.out.println(row);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static boolean closeConnection() {
         try {
             openConnection.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(Databased.class.getName()).log(Level.SEVERE, null, ex);
+            openConnection = null;
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
+    }
+
+    public static void main(String[] args) {
+        
+        
+        establishConnection();
+        
+        Scanner s = new Scanner(System.in);
+        String in;
+        while(!(in = s.nextLine()).equals("close")){
+            System.out.println(in);
+            if(in.equals("s")){
+                String st = s.nextLine();
+                executeStatement(st);
+            }
+            else
+                executeQuery(s.nextLine());
+        }
+
+        closeConnection();
     }
 }

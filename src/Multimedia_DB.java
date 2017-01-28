@@ -84,7 +84,7 @@ public class Multimedia_DB {
             return false;
         }
     }
-
+/*
     public static void main(String[] args) {
         establishConnection();
 
@@ -111,5 +111,5 @@ public class Multimedia_DB {
         String query = "";
 
         closeConnection();
-    }
+    }*/
 }

@@ -76,7 +76,7 @@ public class ScrollResSet {
 			return false;
 		}
 	}
-	
+	/*
 	public static void main(String[] args){
 		
 	   establishConnection();
@@ -110,6 +110,6 @@ public class ScrollResSet {
 				
 		//close the connection
 		closeConnection();
-	}
+	}*/
 
 }

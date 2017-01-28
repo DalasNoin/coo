@@ -307,7 +307,7 @@ public class myDBConnection {
     	return isUpdatable;
     }
 /************************************************************************************************************************************************************************/
-    
+    /*
     public static void main(String args[]){
     	
     	try{
@@ -345,25 +345,19 @@ public class myDBConnection {
             java.sql.Date data = dbcon.getDate("DB1-Klausur");
             System.out.println("Datum DB1-Klausur: " + data.toString());
             
-            /************************************************************************** Blatt 8 *************************************************************************************/
             //3a)
             dbcon.setSeatNumber(6);
             
             //3b)
             dbcon.deleteTupel(2);
             
-            //3c)
-            /*
-             * Das Result Set ist nicht updatebar, da es sich nicht nur auf eine Relation bezieht, sondern einen Join enthaelt. Ein
-             * Update koennte somit nicht eindeutig den Basisrelationen zugeordnet werden.
-             */
+           
             System.out.println(dbcon.isCursorUpdatable());
-            /************************************************************************************************************************************************************************/
             
     	} catch(SQLException e) {
             System.out.println("error: " + e.getMessage());
             e.printStackTrace();
         }   
-    }
+    }    */
 }
 
